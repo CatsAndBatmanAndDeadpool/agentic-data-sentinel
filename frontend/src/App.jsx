@@ -1,136 +1,56 @@
 import React, { useState } from 'react';
-import { Upload, FileText, CheckCircle, AlertCircle, RefreshCw } from 'lucide-react';
-import axios from 'axios';
+import FileUpload from './components/FileUpload';
+import AnalysisResults from './components/AnalysisResults';
 
 function App() {
-    const [file, setFile] = useState(null);
-    const [status, setStatus] = useState('idle');
-    const [result, setResult] = useState(null);
+    const [results, setResults] = useState(null);
 
-    const handleFileChange = (e) => {
-        if (e.target.files) {
-            setFile(e.target.files[0]);
-        }
-    };
-
-    const handleUpload = async () => {
-        if (!file) return;
-        setStatus('uploading');
-
-        const formData = new FormData();
-        formData.append('dataset', file);
-        formData.append('analysis_type', 'quality'); // Default for now
-
-        try {
-            // In dev, Vite proxies /api to localhost:3000
-            const response = await axios.post('/api/analyze', formData, {
-                headers: { 'Content-Type': 'multipart/form-data' }
-            });
-            setResult(response.data);
-            setStatus('complete');
-        } catch (err) {
-            console.error(err);
-            setStatus('error');
-        }
+    const handleAnalysisComplete = (data) => {
+        setResults(data);
     };
 
     return (
-        <div className="min-h-screen bg-datamundi-dark text-white p-8">
-            {/* Header */}
-            <header className="max-w-6xl mx-auto mb-12 flex items-center justify-between">
-                <div className="flex items-center gap-3">
-                    <div className="w-10 h-10 bg-gradient-to-br from-datamundi-primary to-datamundi-accent rounded-lg flex items-center justify-center font-heading font-bold text-xl shadow-[0_0_15px_rgba(109,40,217,0.5)]">
-                        A
+        <div className="min-h-screen relative overflow-x-hidden bg-datamundi-dark text-white selection:bg-datamundi-primary/30">
+            {/* Background Gradients */}
+            <div className="fixed inset-0 pointer-events-none">
+                <div className="absolute top-[-20%] left-[-10%] w-[50%] h-[50%] bg-datamundi-primary/20 rounded-full blur-[120px]" />
+                <div className="absolute bottom-[-20%] right-[-10%] w-[50%] h-[50%] bg-datamundi-secondary/10 rounded-full blur-[120px]" />
+            </div>
+
+            <div className="relative z-10 max-w-6xl mx-auto px-6 py-12 flex flex-col items-center">
+
+                {/* Header */}
+                <header className="mb-16 text-center space-y-4">
+                    <div className="inline-flex items-center justify-center p-3 mb-6 bg-slate-800/50 rounded-2xl ring-1 ring-slate-700/50 shadow-2xl backdrop-blur-xl">
+                        <div className="w-10 h-10 bg-gradient-to-br from-datamundi-primary to-datamundi-accent rounded-xl flex items-center justify-center font-heading font-bold text-xl shadow-[0_0_15px_rgba(109,40,217,0.5)] mr-3">
+                            A
+                        </div>
+                        <span className="text-xl font-heading font-bold tracking-tight text-slate-100">
+                            AIDA <span className="text-transparent bg-clip-text bg-gradient-to-r from-datamundi-secondary to-blue-400">Security</span>
+                        </span>
                     </div>
-                    <h1 className="text-3xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-white to-gray-400">
-                        AIDA <span className="text-datamundi-secondary">Security Evaluator</span>
+
+                    <h1 className="text-5xl md:text-6xl font-bold font-heading tracking-tight bg-clip-text text-transparent bg-gradient-to-b from-white via-white to-slate-400">
+                        Secure AI Data Evaluator
                     </h1>
-                </div>
-                <div className="text-sm text-gray-400 font-sans">
-                    Powered by CrewAI & Bandit
-                </div>
-            </header>
+                    <p className="text-lg text-slate-400 max-w-2xl mx-auto">
+                        Upload your datasets for automated structure analysis and quality auditing powered by CrewAI agents.
+                    </p>
+                </header>
 
-            <main className="max-w-4xl mx-auto">
+                {/* Main Content */}
+                <main className="w-full space-y-12">
+                    <FileUpload onAnalysisComplete={handleAnalysisComplete} />
+                    <AnalysisResults results={results} />
+                </main>
 
-                {/* Upload Section */}
-                <section className="bg-datamundi-surface border border-gray-800 rounded-2xl p-10 text-center mb-8 relative overflow-hidden group hover:border-datamundi-primary/50 transition-colors">
-                    <div className="absolute inset-0 bg-gradient-to-br from-datamundi-primary/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
-
-                    <div className="relative z-10 flex flex-col items-center gap-4">
-                        <div className="w-16 h-16 bg-gray-900 rounded-full flex items-center justify-center mb-2 shadow-inner">
-                            <Upload className="text-datamundi-secondary w-8 h-8" />
-                        </div>
-
-                        <h2 className="text-2xl font-bold">Upload Data for Evaluation</h2>
-                        <p className="text-gray-400 max-w-md">
-                            Drag and drop your CSV/JSON file here to trigger the automated security and quality analysis agents.
-                        </p>
-
-                        <label className="mt-4 inline-flex items-center gap-2 px-6 py-3 bg-datamundi-primary hover:bg-datamundi-accent text-white rounded-xl font-medium cursor-pointer transition-all shadow-lg hover:shadow-datamundi-primary/50">
-                            <input type="file" className="hidden" onChange={handleFileChange} accept=".csv,.json" />
-                            <span>{file ? file.name : "Select Dataset"}</span>
-                        </label>
-
-                        {file && (
-                            <button
-                                onClick={handleUpload}
-                                disabled={status === 'uploading'}
-                                className="mt-4 text-datamundi-secondary hover:text-white underline underline-offset-4 disabled:opacity-50"
-                            >
-                                {status === 'uploading' ? 'Analyzing...' : 'Run Analysis'}
-                            </button>
-                        )}
-                    </div>
-                </section>
-
-                {/* Results Section */}
-                {status === 'complete' && result && (
-                    <div className="animate-fade-in space-y-6">
-                        <div className="flex items-center justify-between">
-                            <h3 className="text-xl font-bold text-gray-200 flex items-center gap-2">
-                                <CheckCircle className="text-green-400" /> Analysis Complete
-                            </h3>
-                            <span className="text-sm text-gray-500">ID: {Date.now()}</span>
-                        </div>
-
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                            {/* Card 1: Summary */}
-                            <div className="bg-gray-900/50 border border-gray-800 p-6 rounded-xl">
-                                <h4 className="text-datamundi-secondary font-bold mb-2">Agent Summary</h4>
-                                <p className="text-gray-300 leading-relaxed">
-                                    {result.result?.summary || "No summary provided."}
-                                </p>
-                            </div>
-
-                            {/* Card 2: Metrics */}
-                            <div className="bg-gray-900/50 border border-gray-800 p-6 rounded-xl">
-                                <h4 className="text-datamundi-secondary font-bold mb-2">Data Metrics</h4>
-                                <div className="space-y-2">
-                                    <div className="flex justify-between border-b border-gray-800 py-2">
-                                        <span className="text-gray-400">File Type</span>
-                                        <span className="font-mono">{result.file?.split('.').pop()}</span>
-                                    </div>
-                                    <div className="flex justify-between border-b border-gray-800 py-2">
-                                        <span className="text-gray-400">Size</span>
-                                        <span className="font-mono">{result.result?.data_length || 0} bytes</span>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                )}
-
-                {status === 'error' && (
-                    <div className="bg-red-900/20 border border-red-900/50 text-red-200 p-4 rounded-xl flex items-center gap-3">
-                        <AlertCircle className="w-6 h-6" />
-                        <p>Analysis failed. Please check the backend connection.</p>
-                    </div>
-                )}
-
-            </main>
+                {/* Footer */}
+                <footer className="mt-20 text-center text-sm text-slate-500 font-medium">
+                    <p>Powered by FastAPI, CrewAI, and React</p>
+                </footer>
+            </div>
         </div>
-    )
+    );
 }
 
-export default App
+export default App;
