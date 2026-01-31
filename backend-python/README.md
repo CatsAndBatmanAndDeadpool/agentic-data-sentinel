@@ -1,4 +1,4 @@
-# AIDA Lite AI Core (Python)
+# Agentic Data Sentinel AI Core (Python)
 
 The engine behind the Secure AI Data Evaluator, responsible for orchestrating multi-agent workflows.
 

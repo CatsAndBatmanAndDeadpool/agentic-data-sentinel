@@ -11,7 +11,7 @@ import os
 import asyncio
 from .agents import create_crew
 
-app = FastAPI(title="AIDA Lite AI Service")
+app = FastAPI(title="Agentic Data Sentinel AI Service")
 
 # Allow CORS for frontend
 app.add_middleware(

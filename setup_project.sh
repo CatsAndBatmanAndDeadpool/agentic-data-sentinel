@@ -1,5 +1,5 @@
 #!/bin/bash
-echo "Setting up AIDA Lite environment..."
+echo "Setting up Agentic Data Sentinel environment..."
 echo "IMPORTANT: Ensure you have an OPENAI_API_KEY ready for the AI Core."
 
 # 1. Check Node

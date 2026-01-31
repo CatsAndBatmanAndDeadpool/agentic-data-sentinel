@@ -1,4 +1,4 @@
-# AIDA Lite Frontend
+# Agentic Data Sentinel Frontend
 
 A premium, React-based dashboard for secure AI data evaluation.
 

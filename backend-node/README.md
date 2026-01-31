@@ -1,6 +1,6 @@
-# AIDA Lite API Gateway (Node.js)
+# Agentic Data Sentinel API Gateway (Node.js)
 
-The central ingress and security layer for the AIDA Lite platform.
+The central ingress and security layer for the Agentic Data Sentinel platform.
 
 ## 🚀 Technologies
 - **Node.js + Express**: Scalable backend hub.

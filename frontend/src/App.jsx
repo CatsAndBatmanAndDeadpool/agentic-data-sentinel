@@ -23,10 +23,10 @@ function App() {
                 <header className="mb-16 text-center space-y-4">
                     <div className="inline-flex items-center justify-center p-3 mb-6 bg-slate-800/50 rounded-2xl ring-1 ring-slate-700/50 shadow-2xl backdrop-blur-xl">
                         <div className="w-10 h-10 bg-gradient-to-br from-datamundi-primary to-datamundi-accent rounded-xl flex items-center justify-center font-heading font-bold text-xl shadow-[0_0_15px_rgba(109,40,217,0.5)] mr-3">
-                            A
+                            S
                         </div>
                         <span className="text-xl font-heading font-bold tracking-tight text-slate-100">
-                            AIDA <span className="text-transparent bg-clip-text bg-gradient-to-r from-datamundi-secondary to-blue-400">Security</span>
+                            Sentinel <span className="text-transparent bg-clip-text bg-gradient-to-r from-datamundi-secondary to-blue-400">Security</span>
                         </span>
                     </div>
 

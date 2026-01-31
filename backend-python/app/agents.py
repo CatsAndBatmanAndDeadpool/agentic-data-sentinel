@@ -85,7 +85,7 @@ def create_crew(data_summary: str, sample_data: str) -> Crew:
             "config": {
                 "model": "models/embedding-001",
                 "task_type": "retrieval_document",
-                "title": "Embeddings for AIDA Security"
+                "title": "Embeddings for Sentinel Security"
             }
         } if os.environ.get("GEMINI_API_KEY") else None
     )

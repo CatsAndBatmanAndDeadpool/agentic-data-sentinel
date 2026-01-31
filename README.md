@@ -8,7 +8,7 @@
 
 ## 🎯 Project Context
 
-This project was developed as a technical demonstration of building secure, human-in-the-loop AI data pipelines. It is specifically designed to showcase proficiency in **FastAPI**, **CrewAI**, and **DevSecOps** (SAST/DAST) in the context of advanced data evaluation platforms like DATAmundi's AIDA Hub.
+This project was developed as a technical demonstration of building secure, human-in-the-loop AI data pipelines. It is specifically designed to showcase proficiency in **FastAPI**, **React**, **Node.js**, **CrewAI**, and **DevSecOps** (SAST/DAST/SCA) in the context of advanced data evaluation platforms like DATAmundi's AIDA Hub.
 
 ## 🚀 Why use Agentic Data Sentinel?
 
