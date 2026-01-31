@@ -1,17 +1,23 @@
 from crewai import Agent, Task, Crew, Process
 import os
-
-# Placeholder for specific model config if needed
-# os.environ["OPENAI_API_KEY"] = "YOUR_KEY_HERE"
+from langchain_google_genai import ChatGoogleGenerativeAI
 
 def create_crew(data_summary: str, sample_data: str) -> Crew:
     """
     Creates and returns a CrewAI crew configured for data analysis.
-    
-    Args:
-        data_summary (str): A string description of the dataset structure (columns, rows, etc).
-        sample_data (str): A string containing a sample of the data.
+    Supports OpenAI (default) or Google Gemini if GEMINI_API_KEY is detected.
     """
+    
+    # LLM Configuration
+    llm = None
+    if os.environ.get("GEMINI_API_KEY"):
+        llm = ChatGoogleGenerativeAI(
+            model="gemini-pro",
+            verbose=True,
+            temperature=0.7,
+            google_api_key=os.environ["GEMINI_API_KEY"]
+        )
+    # Else: defaults to OpenAI via CrewAI's internal logic if OPENAI_API_KEY is set
 
     # 1. Define Agents
     structure_analyst = Agent(
@@ -21,7 +27,8 @@ def create_crew(data_summary: str, sample_data: str) -> Crew:
         of data files (CSV, JSON, etc.) and identify the schema, data types, and potential 
         structural flaws (like missing headers or inconsistent formatting).""",
         verbose=True,
-        allow_delegation=False
+        allow_delegation=False,
+        llm=llm
     )
 
     quality_auditor = Agent(
@@ -31,7 +38,8 @@ def create_crew(data_summary: str, sample_data: str) -> Crew:
         to find missing values, outliers, potential PII leakage, or garbage data. 
         You rely on the Structure Analyst's initial findings.""",
         verbose=True,
-        allow_delegation=False # Can set to True if we want them to talk, but for simple flow False is fine
+        allow_delegation=False, # Can set to True if we want them to talk, but for simple flow False is fine
+        llm=llm
     )
 
     # 2. Define Tasks

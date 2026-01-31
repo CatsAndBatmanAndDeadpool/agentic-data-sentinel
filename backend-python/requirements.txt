@@ -4,3 +4,4 @@ crewai
 pandas
 python-multipart
 requests
+langchain-google-genai
