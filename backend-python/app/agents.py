@@ -79,7 +79,16 @@ def create_crew(data_summary: str, sample_data: str) -> Crew:
         agents=[structure_analyst, quality_auditor],
         tasks=[analysis_task, audit_task],
         process=Process.sequential,
-        verbose=True
+        verbose=True,
+        memory=False, # Disable memory to avoid OpenAI embedding requirement
+        embedder={
+            "provider": "google",
+            "config": {
+                "model": "models/embedding-001",
+                "task_type": "retrieval_document",
+                "title": "Embeddings for AIDA Security"
+            }
+        } if os.environ.get("GEMINI_API_KEY") else None
     )
 
     return crew

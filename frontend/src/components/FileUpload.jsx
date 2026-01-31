@@ -13,6 +13,7 @@ const FileUpload = ({ onAnalysisComplete }) => {
     const [isDragOver, setIsDragOver] = useState(false);
     const [uploadStatus, setUploadStatus] = useState('idle'); // idle, uploading, success, error
     const [errorMessage, setErrorMessage] = useState('');
+    const [analysisStatus, setAnalysisStatus] = useState('');
 
     const handleDragOver = useCallback((e) => {
         e.preventDefault();
@@ -41,24 +42,47 @@ const FileUpload = ({ onAnalysisComplete }) => {
 
     const handleFileUpload = async (file) => {
         setUploadStatus('uploading');
+        setAnalysisStatus('Starting upload...');
         setErrorMessage('');
 
         const formData = new FormData();
         formData.append('file', file);
 
         try {
-            // In production, use env var for URL
             const response = await axios.post('http://localhost:8000/analyze', formData, {
                 headers: {
                     'Content-Type': 'multipart/form-data',
                 },
             });
 
-            setUploadStatus('success');
-            onAnalysisComplete(response.data);
+            const jobId = response.data.job_id;
 
-            // Reset status after a moment to allow another upload
-            setTimeout(() => setUploadStatus('idle'), 3000);
+            // Poll for status
+            const pollInterval = setInterval(async () => {
+                try {
+                    const statusRes = await axios.get(`http://localhost:8000/status/${jobId}`);
+                    setAnalysisStatus(statusRes.data.status);
+
+                    if (statusRes.data.status === 'completed') {
+                        clearInterval(pollInterval);
+                        setUploadStatus('success');
+                        onAnalysisComplete(statusRes.data.result);
+                        setTimeout(() => {
+                            setUploadStatus('idle');
+                            setAnalysisStatus('');
+                        }, 3000);
+                    } else if (statusRes.data.status === 'failed') {
+                        clearInterval(pollInterval);
+                        setUploadStatus('error');
+                        setErrorMessage(statusRes.data.error || 'Analysis failed.');
+                    }
+                } catch (err) {
+                    clearInterval(pollInterval);
+                    console.error("Polling error:", err);
+                    setUploadStatus('error');
+                    setErrorMessage('Lost connection to analysis service.');
+                }
+            }, 1500);
 
         } catch (error) {
             console.error("Upload error:", error);
@@ -133,9 +157,14 @@ const FileUpload = ({ onAnalysisComplete }) => {
                             >
                                 <Loader className="w-10 h-10 text-blue-500" />
                             </motion.div>
-                            <p className="text-slate-300 font-medium animate-pulse">
-                                Agents are analyzing your data...
-                            </p>
+                            <div className="text-center space-y-2">
+                                <p className="text-slate-200 font-semibold tracking-wide">
+                                    Analyzing Data...
+                                </p>
+                                <p className="text-sm text-blue-400/90 font-medium animate-pulse">
+                                    {analysisStatus || 'Checking agents...'}
+                                </p>
+                            </div>
                         </motion.div>
                     )}
 
