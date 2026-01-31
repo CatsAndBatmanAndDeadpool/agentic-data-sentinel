@@ -23,13 +23,15 @@ jobs:
       run: pip install bandit
       
     - name: Run Bandit (SAST)
-      run: bandit -r backend-python/app -f json -o bandit-results.json || true # Continue even if issues found
+      run: bandit -r backend-python/app -f json -o bandit-results.json
+      continue-on-error: true
 
     - name: Upload Bandit Results
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       with:
         name: bandit-report
         path: bandit-results.json
+        if-no-files-found: warn
 
     # 3. SCA: Safety (Open Source alternative to Snyk for demo)
     - name: Install Safety
