@@ -68,5 +68,5 @@ async def analyze_data(file: UploadFile = File(...)):
 import os
 
 if __name__ == "__main__":
-    host = os.getenv("HOST", "0.0.0.0") # Allows configuration, defaults to 0.0.0.0 for Docker convenience
+    host = os.getenv("HOST", "127.0.0.1") # Secure default: localhost. Use HOST=0.0.0.0 for Docker.
     uvicorn.run("app.main:app", host=host, port=8000, reload=True)
