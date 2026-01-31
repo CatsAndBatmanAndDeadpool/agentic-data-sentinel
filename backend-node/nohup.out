@@ -1,6 +1,24 @@
-[dotenv@17.2.3] injecting env (0) from .env -- tip: 🔐 encrypt with Dotenvx: https://dotenvx.com
+[dotenv@17.2.3] injecting env (0) from .env -- tip: 🛠️  run anywhere with `dotenvx run -- yourcommand`
 Node.js Gateway running on port 3000
 Received file: sample_dataset.json
-Error fetching status for job error: { detail: 'Job not found' }
 Received file: sample_dataset.json
-Received file: sample_dataset.json
+Received file: sample_data.json
+Received file: evaluation_test_data.json
+Received file: evaluation_test_data.json
+Received file: evaluation_test_data.json
+Received file: low_quality_data.json
+Received file: high_quality_data.json
+Received file: high_quality_data.json
+Received file: low_quality_data.json
+Received file: low_quality_data.json
+Received file: high_quality_data.json
+Received file: low_quality_data.json
+Received file: high_quality_data.json
+Received file: low_quality_data.json
+Received file: low_quality_data.json
+Received file: low_quality_data.json
+Received file: low_quality_data.json
+Received file: high_quality_data.json
+Received file: low_quality_data.json
+Received file: low_quality_data.json
+Received file: high_quality_data.json

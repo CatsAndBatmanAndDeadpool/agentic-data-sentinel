@@ -28,7 +28,7 @@ app.get('/health', (req, res) => {
 const FormData = require('form-data');
 
 // Upload and Analyze Route
-app.post('/api/analyze', upload.single('dataset'), async (req, res) => {
+app.post('/api/analyze', upload.single('file'), async (req, res) => {
   if (!req.file) {
     return res.status(400).json({ error: 'No file uploaded' });
   }

@@ -1,0 +1,26 @@
+[
+    {
+        "id": "ERR_01",
+        "user_name": null,
+        "email": "invalid_mail",
+        "signup_date": "2023-13-45",
+        "usage_score": "FORTY_TWO",
+        "notes": "DANGER: User SSN is 999-00-1111"
+    },
+    {
+        "id": 2,
+        "user_name": "Incomplete User",
+        "email": "",
+        "signup_date": null,
+        "usage_score": 0.0,
+        "notes": "Address: 123 Main St, Anytown"
+    },
+    {
+        "id": 3.5,
+        "user_name": "Mixed Type ID",
+        "email": "test@test.com",
+        "signup_date": "2024-01-01",
+        "usage_score": null,
+        "notes": "Empty score"
+    }
+]

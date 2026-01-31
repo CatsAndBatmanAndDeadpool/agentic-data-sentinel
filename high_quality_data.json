@@ -1,0 +1,26 @@
+[
+    {
+        "id": 1,
+        "user_name": "Alice Green",
+        "email": "alice@datamundi.com",
+        "signup_date": "2024-01-01",
+        "usage_score": 98.2,
+        "notes": "Verified enterprise user"
+    },
+    {
+        "id": 2,
+        "user_name": "Charlie Brown",
+        "email": "charlie@datamundi.com",
+        "signup_date": "2024-01-02",
+        "usage_score": 75.0,
+        "notes": "Standard plan"
+    },
+    {
+        "id": 3,
+        "user_name": "Diana Prince",
+        "email": "diana@datamundi.com",
+        "signup_date": "2024-01-03",
+        "usage_score": 88.5,
+        "notes": "Active contributor"
+    }
+]
