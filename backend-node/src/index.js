@@ -25,6 +25,8 @@ app.get('/health', (req, res) => {
   res.json({ status: 'ok', service: 'gateway' });
 });
 
+const FormData = require('form-data');
+
 // Upload and Analyze Route
 app.post('/api/analyze', upload.single('dataset'), async (req, res) => {
   if (!req.file) {
@@ -34,38 +36,45 @@ app.post('/api/analyze', upload.single('dataset'), async (req, res) => {
   console.log(`Received file: ${req.file.originalname}`);
 
   try {
-    // 1. Read the file
-    const fileContent = fs.readFileSync(req.file.path, 'utf-8');
-
-    // 2. Prepare payload for Python Service
-    // We send the raw CSV/JSON content or the path, depending on architecture. 
-    // Sending content is simpler for stateless containerization.
-    const payload = {
+    // 1. Prepare FormData for Python Service
+    const form = new FormData();
+    form.append('file', fs.createReadStream(req.file.path), {
       filename: req.file.originalname,
-      content: fileContent,
-      analysis_type: req.body.analysis_type || 'general'
-    };
+      contentType: req.file.mimetype
+    });
+    // Append analysis_type if it's part of the request body
+    if (req.body.analysis_type) {
+      form.append('analysis_type', req.body.analysis_type);
+    }
 
-    // 3. Forward to Python AI Service
-    // Note: In a real prod env, we might use a message queue (RabbitMQ/Kafka) here.
-    const response = await axios.post(`${PYTHON_SERVICE_URL}/analyze`, payload);
+    // 2. Forward to Python AI Service
+    const response = await axios.post(`${PYTHON_SERVICE_URL}/analyze`, form, {
+      headers: {
+        ...form.getHeaders()
+      }
+    });
 
-    // 4. Cleanup temp file
+    // 3. Cleanup temp file
     fs.unlinkSync(req.file.path);
 
-    // 5. Return result
+    // 4. Return job_id
     res.json(response.data);
 
   } catch (error) {
-    console.error('Error forwarding to AI Service:', error.message);
-    // Cleanup even on error
+    console.error('Error forwarding to AI Service:', error.response?.data || error.message);
     if (fs.existsSync(req.file.path)) fs.unlinkSync(req.file.path);
-    
-    if (error.code === 'ECONNREFUSED') {
-         res.status(503).json({ error: 'AI Service Unavailable' });
-    } else {
-         res.status(500).json({ error: 'Analysis failed' });
-    }
+    res.status(500).json({ error: 'Failed to initiate analysis' });
+  }
+});
+
+// Proxy for status
+app.get('/api/status/:job_id', async (req, res) => {
+  try {
+    const response = await axios.get(`${PYTHON_SERVICE_URL}/status/${req.params.job_id}`);
+    res.json(response.data);
+  } catch (error) {
+    console.error(`Error fetching status for job ${req.params.job_id}:`, error.response?.data || error.message);
+    res.status(500).json({ error: 'Failed to fetch status' });
   }
 });
 
