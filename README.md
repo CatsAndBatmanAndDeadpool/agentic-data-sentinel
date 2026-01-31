@@ -1,18 +1,26 @@
 # 🛡️ Secure AI Data Evaluator (AIDA Lite)
 
+[![Security Pipeline](https://github.com/CatsAndBatmanAndDeadpool/aida-lite-security-evaluator/actions/workflows/security-pipeline.yml/badge.svg)](https://github.com/CatsAndBatmanAndDeadpool/aida-lite-security-evaluator/actions/workflows/security-pipeline.yml)
 [![Architecture: Microservices](https://img.shields.io/badge/Architecture-Microservices-blue.svg)](https://img.shields.io/badge/Architecture-Microservices-blue.svg)
 [![AI: CrewAI + OpenAI](https://img.shields.io/badge/AI-CrewAI%20%2B%20OpenAI-purple.svg)](https://img.shields.io/badge/AI-CrewAI%20%2B%20OpenAI-purple.svg)
-[![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](https://opensource.org/licenses/MIT)
 
-**AIDA Lite** is a professional-grade, specialized AI data evaluation platform. It demonstrates modern full-stack engineering, multi-agent AI orchestration, and a security-first approach to data auditing.
+**AIDA Lite** is a smart tool that automatically "health-checks" your data files. It scans for hidden security risks (like leaked SSNs or emails) and cleans up structural mess before you feed the data into your AI models.
 
-## 🚀 The Value Proposition
+## 🚀 Why use AIDA Lite?
 
-Managing raw datasets is often a "black box" of PII risks and structural inconsistencies. AIDA Lite automates this by employing a **Crew** of specialized AI agents that execute a multi-step audit, providing a "Data Health Score" and a "Deep-Audit Table" for immediate developer action.
+If you work with data, you know the "Garbage In, Garbage Out" problem. AIDA Lite acts as a security gatekeeper:
+- **Instant Security Scans**: Catches PII (Personally Identifiable Information) before it leaks.
+- **Smart Cleanup**: Tells you exactly how to fix mixed data types and missing values.
+- **AI-Powered Insights**: Uses a "Crew" of AI agents to think like a Data Engineer and Security Auditor.
+
+## 📸 Dashboard Preview
+
+![Analysis Report Preview](docs/report-preview.png)
+*The professional tabular report provides a grouped, high-level overview of security and structural health.*
 
 ## 🏗️ Technical Architecture
 
-The system follows a decoupled, 3-tier microservices architecture designed for scalability and separation of concerns:
+AIDA Lite is built using a modern 3-tier microservices approach to ensure it is fast, secure, and scalable:
 
 ```mermaid
 graph TD
@@ -36,26 +44,29 @@ graph TD
     C <-->|Internal API| E
 ```
 
+## 🛡️ Automated Security Pipeline (DevSecOps)
+
+This project implements a full **DevSecOps Life Cycle**. Every time code is pushed to the `main` branch, an automated pipeline triggers to ensure maximum security:
+
+- **SAST (Static Application Security Testing)**: Uses `Bandit` to scan Python code for potential vulnerabilities.
+- **SCA (Software Composition Analysis)**: Uses `Safety` to check all dependencies for known security flaws.
+- **DAST Placeholder**: A dedicated slot for Dynamic scans (like OWASP ZAP) to test the running API.
+- **Automated Build**: Ensures the React frontend and local distributions are healthy.
+
 ### 🛠️ Technology Stack
 | Layer | Technologies |
 | :--- | :--- |
 | **Frontend** | React 18, Tailwind CSS, Framer Motion, Lucide Icons |
 | **API Gateway** | Node.js, Express, Multer, Helmet, CORS |
 | **Backend AI** | Python 3.10+, FastAPI, Pandas, CrewAI |
-| **AI/LLM** | OpenAI API (GPT-4o / GPT-4o-mini), Pydantic |
+| **Security/CI/CD** | GitHub Actions, Bandit, Safety, ShellCheck |
 
 ## 🌟 Key Features
 
-- **Multi-Agent Orchestration**: Uses CrewAI to manage sequential tasks where Agent Outputs (Structure) inform follow-up tasks (Security).
-- **Secure-by-Design**: Node.js gateway enforces security headers and proxies internal microservices to hide the AI core from direct public access.
-- **Intelligent PII Detection**: Pattern-based and heuristic scanning for SSNs, emails, and sensitive keys.
-- **Professional UI/UX**: A glassmorphic dashboard with smooth animations and dynamic tabular reporting with merged sections.
-- **Fail-Safe "Mock Mode"**: Includes a dynamic Simulation engine for local development without active OpenAI credits.
-
-## 🤖 AI Agent Responsibilities
-
-1.  **Structure Analyst**: Validates schema consistency, identifies mixed data types, and recommends Primary Key candidates.
-2.  **Security & Quality Auditor**: Scans for sensitive patterns, evaluates data density, and generates the final **Data Health Score**.
+- **Multi-Agent Orchestration**: Uses CrewAI to manage sequential tasks where Agent Outputs inform follow-up actions.
+- **Secure-by-Design**: Node.js gateway enforces security headers and proxies internal microservices.
+- **Professional UI/UX**: A glassmorphic dashboard with dynamic tabular reporting and merged sections.
+- **Fail-Safe "Mock Mode"**: Includes a simulation engine for development without active OpenAI credits.
 
 ## 💻 Getting Started
 
@@ -65,22 +76,10 @@ graph TD
 - OpenAI API Key (Optional; use `MOCK_AI=true` for simulation)
 
 ### ⚡ Quick Start (Setup Script)
-We provide a unified setup script to configure all microservices:
-
 ```bash
 chmod +x setup_project.sh
 ./setup_project.sh
 ```
-
-### 🔧 Manual Configuration
-1. **Python Backend**:
-   - `cd backend-python && python3 -m venv venv && source venv/bin/activate`
-   - `pip install -r requirements.txt`
-   - Create `.env`: `OPENAI_API_KEY=sk-...` and `MOCK_AI=true` (if no key)
-2. **Node Gateway**:
-   - `cd backend-node && npm install`
-3. **Frontend**:
-   - `cd frontend && npm install`
 
 ---
 *Created as a Portfolio Project by Sarang Kawade*
