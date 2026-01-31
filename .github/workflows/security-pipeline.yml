@@ -1,0 +1,57 @@
+name: Security Pipeline
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  security-checks:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v3
+
+    # 1. Setup Python
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.10'
+
+    # 2. SAST: Bandit
+    - name: Install Bandit
+      run: pip install bandit
+      
+    - name: Run Bandit (SAST)
+      run: bandit -r backend-python/app -f json -o bandit-results.json || true # Continue even if issues found
+
+    - name: Upload Bandit Results
+      uses: actions/upload-artifact@v3
+      with:
+        name: bandit-report
+        path: bandit-results.json
+
+    # 3. SCA: Safety (Open Source alternative to Snyk for demo)
+    - name: Install Safety
+      run: pip install safety
+
+    - name: Run Safety (SCA)
+      run: safety check -r backend-python/requirements.txt --continue-on-error
+
+    # 4. DAST Placeholder (ZAP or similar would go here)
+    - name: DAST Placeholder
+      run: |
+        echo "Running DAST Scan..."
+        echo "DAST Scan completed (Placeholder)"
+
+    # 5. Build/Test Frontend (Basic Check)
+    - name: Setup Node.js
+      uses: actions/setup-node@v3
+      with:
+        node-version: 18
+
+    - name: Install Frontend Dependencies
+      run: |
+        cd frontend
+        npm install
+        npm run build
