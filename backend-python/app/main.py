@@ -65,5 +65,8 @@ async def analyze_data(file: UploadFile = File(...)):
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
 
+import os
+
 if __name__ == "__main__":
-    uvicorn.run("app.main:app", host="0.0.0.0", port=8000, reload=True)
+    host = os.getenv("HOST", "0.0.0.0") # Allows configuration, defaults to 0.0.0.0 for Docker convenience
+    uvicorn.run("app.main:app", host=host, port=8000, reload=True)
