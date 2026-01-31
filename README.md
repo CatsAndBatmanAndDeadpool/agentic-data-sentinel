@@ -19,8 +19,13 @@ If you work with data, you know the "Garbage In, Garbage Out" problem. Agentic D
 
 ## 📸 Dashboard Preview
 
-![Analysis Report Preview](docs/report-preview.png)
-*The professional tabular report provides a grouped, high-level overview of security and structural health.*
+> [!NOTE]
+> The reports shown below are generated from a **mock run** for demonstration purposes and do not use the live OpenAI LLM.
+
+| Landing Page | High Quality Report | Low Quality Report |
+| :---: | :---: | :---: |
+| ![Landing Page](docs/landing-page.png) | ![High Quality Report](docs/high-quality-report.png) | ![Low Quality Report](docs/low-quality-report.png) |
+
 
 ## 🏗️ Technical Architecture
 
@@ -36,7 +41,7 @@ graph TD
         C[Node.js / Express] -->|Buffering & Proxy| D[Security Middlewares]
     end
     
-    subgraph "AI Core (Asynchronous Processing)"
+    subgraph "AI Core (Async Engine)"
         E[FastAPI / Python] -->|Job Management| F[CrewAI Engine]
         F -->|Agent 1| G[Structure Analyst]
         F -->|Agent 2| H[Security Auditor]
