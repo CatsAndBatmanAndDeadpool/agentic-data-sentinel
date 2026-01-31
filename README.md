@@ -1,49 +1,86 @@
-# Secure AI Data Evaluator (AIDA Lite)
+# 🛡️ Secure AI Data Evaluator (AIDA Lite)
 
-A professional-grade, specialized AI data evaluation platform designed to demonstrate modern software architecture, multi-agent AI orchestration, and DevSecOps best practices.
+[![Architecture: Microservices](https://img.shields.io/badge/Architecture-Microservices-blue.svg)](https://img.shields.io/badge/Architecture-Microservices-blue.svg)
+[![AI: CrewAI + OpenAI](https://img.shields.io/badge/AI-CrewAI%20%2B%20OpenAI-purple.svg)](https://img.shields.io/badge/AI-CrewAI%20%2B%20OpenAI-purple.svg)
+[![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](https://opensource.org/licenses/MIT)
 
-## 🚀 Overview
+**AIDA Lite** is a professional-grade, specialized AI data evaluation platform. It demonstrates modern full-stack engineering, multi-agent AI orchestration, and a security-first approach to data auditing.
 
-AIDA Lite is a 3-tier microservices application that provides automated structural and security audits for datasets (CSV/JSON). It leverages **CrewAI** with **OpenAI GPT-4o** to orchestrate specialized agents that analyze data health, identify PII risks, and evaluate schema consistency.
+## 🚀 The Value Proposition
 
-## 🏗️ Architecture
+Managing raw datasets is often a "black box" of PII risks and structural inconsistencies. AIDA Lite automates this by employing a **Crew** of specialized AI agents that execute a multi-step audit, providing a "Data Health Score" and a "Deep-Audit Table" for immediate developer action.
 
-The project follows a robust, decoupled architecture:
+## 🏗️ Technical Architecture
 
-1.  **React Frontend (Vite + TailwindCSS)**: A high-performance, premium dashboard with smooth transitions (Framer Motion) and real-time status polling.
-2.  **Node.js API Gateway (Express)**: The central ingress point. Handles file buffers (Multer), enforces security headers (Helmet), and proxies traffic to the AI core.
-3.  **Python AI Core (FastAPI)**: Asynchronous service managing long-running AI jobs. Orchestrates a **Crew** of agents to analyze data headlessly.
+The system follows a decoupled, 3-tier microservices architecture designed for scalability and separation of concerns:
 
-## 🤖 Multi-Agent AI System
+```mermaid
+graph TD
+    subgraph "Frontend (Reactive UI)"
+        A[React Dashboard] -->|File Upload| B[Vite / Tailwind]
+    end
+    
+    subgraph "Middleware (API Gateway)"
+        C[Node.js / Express] -->|Buffering & Proxy| D[Security Middlewares]
+    end
+    
+    subgraph "AI Core (Asynchronous Processing)"
+        E[FastAPI / Python] -->|Job Management| F[CrewAI Engine]
+        F -->|Agent 1| G[Structure Analyst]
+        F -->|Agent 2| H[Security Auditor]
+        G --> I[OpenAI / GPT-4o]
+        H --> I
+    end
 
-Powered by **CrewAI**, the system employs a sequential process:
-- **Structure Analyst**: Validates schema, data types, and primary key candidates.
-- **Security & Quality Auditor**: Identifies PII patterns (emails, keys) and generates a data health score.
+    A <-->|Polling & Results| C
+    C <-->|Internal API| E
+```
 
-## 🛡️ Security & DevSecOps
-- **SAST**: Automated Python code analysis via Bandit.
-- **SCA**: Dependency vulnerability scanning via pip-audit/npm-audit.
-- **Node Security**: Implementation of Helmet, CORS, and rate-limiting best practices.
+### 🛠️ Technology Stack
+| Layer | Technologies |
+| :--- | :--- |
+| **Frontend** | React 18, Tailwind CSS, Framer Motion, Lucide Icons |
+| **API Gateway** | Node.js, Express, Multer, Helmet, CORS |
+| **Backend AI** | Python 3.10+, FastAPI, Pandas, CrewAI |
+| **AI/LLM** | OpenAI API (GPT-4o / GPT-4o-mini), Pydantic |
 
-## 🛠️ Getting Started
+## 🌟 Key Features
+
+- **Multi-Agent Orchestration**: Uses CrewAI to manage sequential tasks where Agent Outputs (Structure) inform follow-up tasks (Security).
+- **Secure-by-Design**: Node.js gateway enforces security headers and proxies internal microservices to hide the AI core from direct public access.
+- **Intelligent PII Detection**: Pattern-based and heuristic scanning for SSNs, emails, and sensitive keys.
+- **Professional UI/UX**: A glassmorphic dashboard with smooth animations and dynamic tabular reporting with merged sections.
+- **Fail-Safe "Mock Mode"**: Includes a dynamic Simulation engine for local development without active OpenAI credits.
+
+## 🤖 AI Agent Responsibilities
+
+1.  **Structure Analyst**: Validates schema consistency, identifies mixed data types, and recommends Primary Key candidates.
+2.  **Security & Quality Auditor**: Scans for sensitive patterns, evaluates data density, and generates the final **Data Health Score**.
+
+## 💻 Getting Started
 
 ### Prerequisites
-- Node.js (v18+)
-- Python (3.9+)
-- OpenAI API Key
+- Node.js (v18+) & npm
+- Python (3.9+) & venv
+- OpenAI API Key (Optional; use `MOCK_AI=true` for simulation)
 
-### Setup
-1. Clone the repository.
-2. Run the automated setup script:
-   ```bash
-   chmod +x setup_project.sh
-   ./setup_project.sh
-   ```
-3. Set your environment variables in `backend-python/.env`:
-   ```text
-   OPENAI_API_KEY=sk-...
-   ```
-4. Start the services:
-   - **Frontend**: `cd frontend && npm run dev`
-   - **Node Gateway**: `cd backend-node && node src/index.js`
-   - **Python Core**: `cd backend-python && venv/bin/uvicorn app.main:app --reload`
+### ⚡ Quick Start (Setup Script)
+We provide a unified setup script to configure all microservices:
+
+```bash
+chmod +x setup_project.sh
+./setup_project.sh
+```
+
+### 🔧 Manual Configuration
+1. **Python Backend**:
+   - `cd backend-python && python3 -m venv venv && source venv/bin/activate`
+   - `pip install -r requirements.txt`
+   - Create `.env`: `OPENAI_API_KEY=sk-...` and `MOCK_AI=true` (if no key)
+2. **Node Gateway**:
+   - `cd backend-node && npm install`
+3. **Frontend**:
+   - `cd frontend && npm install`
+
+---
+*Created as a Portfolio Project by Sarang Kawade*
