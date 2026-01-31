@@ -49,7 +49,7 @@ const FileUpload = ({ onAnalysisComplete }) => {
         formData.append('file', file);
 
         try {
-            const response = await axios.post('http://localhost:8000/analyze', formData, {
+            const response = await axios.post('http://127.0.0.1:8000/analyze', formData, {
                 headers: {
                     'Content-Type': 'multipart/form-data',
                 },
@@ -60,7 +60,7 @@ const FileUpload = ({ onAnalysisComplete }) => {
             // Poll for status
             const pollInterval = setInterval(async () => {
                 try {
-                    const statusRes = await axios.get(`http://localhost:8000/status/${jobId}`);
+                    const statusRes = await axios.get(`http://127.0.0.1:8000/status/${jobId}`);
                     setAnalysisStatus(statusRes.data.status);
 
                     if (statusRes.data.status === 'completed') {

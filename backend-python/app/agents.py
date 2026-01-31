@@ -5,19 +5,18 @@ from langchain_google_genai import ChatGoogleGenerativeAI
 def create_crew(data_summary: str, sample_data: str) -> Crew:
     """
     Creates and returns a CrewAI crew configured for data analysis.
-    Supports OpenAI (default) or Google Gemini if GEMINI_API_KEY is detected.
+    Supports Google Gemini 2.0 Flash as the primary engine.
     """
     
     # LLM Configuration
     llm = None
     if os.environ.get("GEMINI_API_KEY"):
         llm = ChatGoogleGenerativeAI(
-            model="gemini-pro",
+            model="gemini-2.0-flash", # Confirmed available for this key
             verbose=True,
             temperature=0.7,
             google_api_key=os.environ["GEMINI_API_KEY"]
         )
-    # Else: defaults to OpenAI via CrewAI's internal logic if OPENAI_API_KEY is set
 
     # 1. Define Agents
     structure_analyst = Agent(
@@ -38,7 +37,7 @@ def create_crew(data_summary: str, sample_data: str) -> Crew:
         to find missing values, outliers, potential PII leakage, or garbage data. 
         You rely on the Structure Analyst's initial findings.""",
         verbose=True,
-        allow_delegation=False, # Can set to True if we want them to talk, but for simple flow False is fine
+        allow_delegation=False,
         llm=llm
     )
 
@@ -80,7 +79,7 @@ def create_crew(data_summary: str, sample_data: str) -> Crew:
         tasks=[analysis_task, audit_task],
         process=Process.sequential,
         verbose=True,
-        memory=False, # Disable memory to avoid OpenAI embedding requirement
+        memory=False,
         embedder={
             "provider": "google",
             "config": {
