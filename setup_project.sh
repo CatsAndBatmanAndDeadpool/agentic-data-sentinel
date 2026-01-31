@@ -1,5 +1,6 @@
 #!/bin/bash
-echo "Setting up environment..."
+echo "Setting up AIDA Lite environment..."
+echo "IMPORTANT: Ensure you have an OPENAI_API_KEY ready for the AI Core."
 
 # 1. Check Node
 if ! command -v npm &> /dev/null

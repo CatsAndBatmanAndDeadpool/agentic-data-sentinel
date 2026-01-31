@@ -1,15 +1,13 @@
 from crewai import Agent, Task, Crew, Process
-from langchain_google_genai import ChatGoogleGenerativeAI
+from langchain_openai import ChatOpenAI
 import os
 
 def create_crew(data_summary: str, sample_data: str):
-    # Initialize Gemini LLM
-    # The API key should be set in environment variables
-    llm = ChatGoogleGenerativeAI(
-        model="gemini-1.5-flash",
-        verbose=True,
+    # Initialize OpenAI LLM
+    llm = ChatOpenAI(
+        model="gpt-4o-mini",
         temperature=0.2,
-        google_api_key=os.getenv("GEMINI_API_KEY")
+        openai_api_key=os.getenv("OPENAI_API_KEY")
     )
 
     # Agent 1: Structure Analyst
@@ -79,8 +77,9 @@ def create_crew(data_summary: str, sample_data: str):
     crew = Crew(
         agents=[structure_analyst, quality_auditor],
         tasks=[task_structure, task_quality],
-        process=Process.sequential, # Sequential: Structure first, then Quality
-        verbose=True
+        process=Process.sequential,
+        verbose=True,
+        memory=False # Keep memory off to avoid embedding dependency issues initially
     )
 
     return crew
