@@ -84,7 +84,18 @@ This project implements a full **DevSecOps Life Cycle**. Every time code is push
 - Python (3.9+) & venv
 - OpenAI API Key (Optional; use `MOCK_AI=true` for simulation)
 
-### ⚡ Quick Start (Setup Script)
+### ⚡ Quick Start (Demo Mode)
+For a quick demonstration using local mock data (no API keys required):
+```bash
+chmod +x start_demo.sh stop_demo.sh
+./start_demo.sh
+```
+To stop all services after your demo:
+```bash
+./stop_demo.sh
+```
+
+### ⚡ Manual Setup
 ```bash
 chmod +x setup_project.sh
 ./setup_project.sh
